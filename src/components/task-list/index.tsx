@@ -4,18 +4,19 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LinearProgress from "@mui/material/LinearProgress";
+import useInterval from "ahooks/lib/useInterval";
 
 import Form from "@/components/task-list/Form";
 import useStore from "@/stores";
 
 export default function TaskList() {
   const store = useStore();
-  console.info(store.hover);
+  useInterval(() => {}, 1000);
 
   return (
     <Box
       sx={{
-        height: "100%",
+        height: "calc(100% - 50px)",
         overflowY: "scroll",
       }}
     >
@@ -28,7 +29,7 @@ export default function TaskList() {
             store.hover
               ? {}
               : {
-                  backgroundColor: "rgba(0, 0, 0, 0.8)",
+                  backgroundColor: "rgba(0, 0, 0, 0.6)",
                   color: "white",
                 }
           }

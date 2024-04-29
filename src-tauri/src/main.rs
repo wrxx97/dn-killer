@@ -48,7 +48,7 @@ fn main() {
             // window
             //     .set_ignore_cursor_events(true)
             //     .expect("error setting ignore cursor events");
-            // window.set_always_on_top(true).unwrap();
+            window.set_always_on_top(true).unwrap();
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![greet])
