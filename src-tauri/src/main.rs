@@ -25,10 +25,10 @@ fn close_process_by_name(process_name: &str) {
 
 fn main() {
     let callback = |event: Event| -> Option<Event> {
-        if let EventType::KeyPress(Key::F5) = event.event_type {
+        if let EventType::KeyPress(Key::F6) = event.event_type {
             println!("Consuming and cancelling CapsLock");
             let process_name = "WeChat.exe";
-            close_process_by_name(process_name);
+            // close_process_by_name(process_name);
             None // CapsLock is now effectively disabled
         } else {
             Some(event)

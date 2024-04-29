@@ -1,0 +1,34 @@
+* {
+  overscroll-behavior: none !important;
+  /* 隐藏滚动条 */
+  scrollbar-width: none;
+}
+
+html,
+body {
+  /* background: white !important; */
+  /* padding: 2px; */
+  margin: 0;
+  height: 100%;
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  padding: 2px;
+  /* margin-top: -24px; */
+}
+
+.hover-app {
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+
+.hover-app:hover {
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
