@@ -41,9 +41,6 @@ export default ({ data }: { data: Task }) => {
           label="时长"
           type="number"
           variant="outlined"
-          onKeyDown={(e) => {
-            console.info(e);
-          }}
         />
       ) : null}
       <TextField
