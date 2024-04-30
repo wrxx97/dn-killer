@@ -19,7 +19,9 @@
       "window": {
         "startDragging": true,
         "setAlwaysOnTop": true,
-        "setSize": true
+        "setSize": true,
+        "minimize": true,
+        "close": true
       }
     },
     "windows": [

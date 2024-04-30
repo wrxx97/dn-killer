@@ -2,6 +2,10 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import IconButton from "@mui/material/IconButton";
 import AddAlarmIcon from "@mui/icons-material/AddAlarm";
 import SettingsIcon from "@mui/icons-material/Settings";
+import CloseIcon from '@mui/icons-material/Close';
+import MinimizeIcon from '@mui/icons-material/Minimize';
+
+import { appWindow } from "@tauri-apps/api/window";
 
 import useStore from "@/stores";
 
@@ -18,10 +22,16 @@ export default () => {
     >
       <ButtonGroup>
         <IconButton onClick={() => store.addTask()}>
-          <AddAlarmIcon />
+          <AddAlarmIcon color="info" />
         </IconButton>
         <IconButton>
-          <SettingsIcon />
+          <SettingsIcon color="info" />
+        </IconButton>
+        <IconButton onClick={() => appWindow.minimize()}>
+          <MinimizeIcon color="info" />
+        </IconButton>
+        <IconButton onClick={() => appWindow.close()} >
+          <CloseIcon color="info" />
         </IconButton>
       </ButtonGroup>
     </div>

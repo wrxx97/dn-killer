@@ -10,14 +10,12 @@ import useStore, { Task } from "@/stores";
 
 export default ({ data }: { data: Task }) => {
   const store = useStore();
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { register, setValue, handleSubmit } = useForm({
     defaultValues: data,
   });
+
+  const isExit = data.type === "exit";
+
   return (
     <Box
       component="form"
@@ -30,20 +28,24 @@ export default ({ data }: { data: Task }) => {
       noValidate
       autoComplete="off"
       onSubmit={handleSubmit((data) => {
-        store.updateTask({ ...data });
+        isExit
+          ? store.updateExitTask({ ...data })
+          : store.updateTask({ ...data });
         store.save();
       })}
     >
       <TextField {...register("title")} label="标题" variant="outlined" />
-      <TextField
-        {...register("duration")}
-        label="时长"
-        type="number"
-        variant="outlined"
-        onKeyDown={(e) => {
-          console.info(e);
-        }}
-      />
+      {!isExit ? (
+        <TextField
+          {...register("duration")}
+          label="时长"
+          type="number"
+          variant="outlined"
+          onKeyDown={(e) => {
+            console.info(e);
+          }}
+        />
+      ) : null}
       <TextField
         {...register("hotkey")}
         label="快捷键"
@@ -58,28 +60,38 @@ export default ({ data }: { data: Task }) => {
         <IconButton type="submit">
           <SaveIcon />
         </IconButton>
-        <IconButton onClick={store.addTask}>
-          <AddIcon />
-        </IconButton>
-        <IconButton onClick={() => store.deleteTask(data.id)}>
-          <DeleteIcon />
-        </IconButton>
+        {isExit
+          ? null
+          : [
+              <IconButton onClick={store.addTask} key="add">
+                <AddIcon />
+              </IconButton>,
+              <IconButton
+                key="delete"
+                onClick={() => {
+                  store.deleteTask(data.id);
+                  store.save();
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>,
+            ]}
       </ButtonGroup>
     </Box>
   );
 };
 
-function formatShortcut(event: KeyboardEvent) {
+function formatShortcut(event: any) {
   let formattedShortcut = "";
-  if (event.ctrlKey) {
-    formattedShortcut += "Ctrl+";
-  }
-  if (event.altKey) {
-    formattedShortcut += "Alt+";
-  }
-  if (event.shiftKey) {
-    formattedShortcut += "Shift+";
-  }
+  // if (event.ctrlKey) {
+  //   formattedShortcut += "Ctrl+";
+  // }
+  // if (event.altKey) {
+  //   formattedShortcut += "Alt+";
+  // }
+  // if (event.shiftKey) {
+  //   formattedShortcut += "Shift+";
+  // }
   formattedShortcut += event.key.toUpperCase();
   return formattedShortcut;
 }

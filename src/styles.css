@@ -22,7 +22,7 @@ body {
 }
 
 .hover-app {
-  border-radius: 20px;
+  border-radius: 4px;
   transition: all 0.3s;
 }
 

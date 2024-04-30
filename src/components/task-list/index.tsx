@@ -5,13 +5,26 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LinearProgress from "@mui/material/LinearProgress";
 import useInterval from "ahooks/lib/useInterval";
+import useUpdate from "ahooks/lib/useUpdate";
 
 import Form from "@/components/task-list/Form";
-import useStore from "@/stores";
+import useStore, { getLeftDuration, processTask } from "@/stores";
 
 export default function TaskList() {
-  const store = useStore();
-  useInterval(() => {}, 1000);
+  const tasks = useStore((store) => store.tasks);
+  const updateTask = useStore((store) => store.updateTask);
+  const hover = useStore((store) => store.hover);
+  const exitTask = useStore((store) => store.exitTask);
+
+  const update = useUpdate();
+  useInterval(() => {
+    tasks.forEach((task) => {
+      if (getLeftDuration(task) <= 0) {
+        updateTask({ ...task, startTime: null });
+      }
+    });
+    update();
+  }, 1000);
 
   return (
     <Box
@@ -20,13 +33,13 @@ export default function TaskList() {
         overflowY: "scroll",
       }}
     >
-      {store.tasks.map((task) => (
+      {[exitTask, ...tasks].map((task) => (
         <Accordion
           defaultExpanded={true}
-          expanded={store.hover}
+          expanded={hover}
           key={task.id}
           sx={
-            store.hover
+            hover
               ? {}
               : {
                   backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -40,8 +53,16 @@ export default function TaskList() {
             id="panel1-header"
           >
             <Box sx={{ width: "100%" }}>
-              {`${task.title} （${180}秒）(快捷键：${task.hotkey})`}
-              <LinearProgress variant="determinate" value={100} />
+              {task.type !== "exit"
+                ? <>
+                  {`${task.title} （${getLeftDuration(task)}秒）(快捷键：${task.hotkey})`}
+                  <LinearProgress
+                    variant="determinate"
+                    value={processTask(task)}
+                  />
+                </>
+                : `退出 ${task.title} (快捷键：${task.hotkey})`
+              }
             </Box>
           </AccordionSummary>
           <AccordionDetails>

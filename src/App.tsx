@@ -1,11 +1,11 @@
 import Header from "@components/header";
 import TaskList from "@components/task-list";
 import useStore from "./stores";
-import useMouse from "@/hooks/useMouse";
+import useTauriEvent from "./hooks/useTauriEvent";
 
 export default function App() {
   const store = useStore();
-  useMouse();
+  useTauriEvent();
   return (
     <div
       style={{
@@ -13,7 +13,7 @@ export default function App() {
         height: "calc(100vh - 4px)",
       }}
       className={store.hover ? "hover-app" : ""}
-      onMouseEnter={() => store.setHover(true)}
+      onMouseOver={() => store.setHover(true)}
       onMouseLeave={() => store.setHover(false)}
     >
       {(store.hover || !store.tasks.length) && <Header></Header>}
