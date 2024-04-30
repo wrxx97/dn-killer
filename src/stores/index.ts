@@ -43,10 +43,10 @@ export const processTask = (task: Task) => {
 
 const exitTask: Task = {
   id: "exit",
-  title: "退出",
+  title: "DragonNest_x64.exe",
   duration: -1,
   completed: false,
-  hotkey: "F5",
+  hotkey: "F6",
   type: "exit",
   processName: "WeChat.exe",
 };
