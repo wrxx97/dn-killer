@@ -1,17 +1,19 @@
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import TextField from "@mui/material/TextField";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
+import FormTextField from "@/components/form-text-field";
+import FormHotKey from "@/components/form-hot-key";
 import { useForm } from "react-hook-form";
 import useStore, { Task } from "@/stores";
 
 export default ({ data }: { data: Task }) => {
   const store = useStore();
-  const { register, setValue, handleSubmit } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues: data,
+    values: data
   });
 
   const isExit = data.type === "exit";
@@ -26,7 +28,7 @@ export default ({ data }: { data: Task }) => {
         color: "white",
       }}
       noValidate
-      autoComplete="off"
+      autoComplete="true"
       onSubmit={handleSubmit((data) => {
         isExit
           ? store.updateExitTask({ ...data })
@@ -34,25 +36,11 @@ export default ({ data }: { data: Task }) => {
         store.save();
       })}
     >
-      <TextField {...register("title")} label="标题" variant="outlined" />
+      <FormTextField name="title" control={control} label="标题" />
       {!isExit ? (
-        <TextField
-          {...register("duration")}
-          label="时长"
-          type="number"
-          variant="outlined"
-        />
+        <FormTextField name="duration" control={control} type="number" label="时长" />
       ) : null}
-      <TextField
-        {...register("hotkey")}
-        label="快捷键"
-        variant="outlined"
-        onKeyDown={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          setValue("hotkey", formatShortcut(e));
-        }}
-      />
+      <FormHotKey name="hotkey" control={control} label="快捷键" />
       <ButtonGroup size="small" aria-label="Small button group">
         <IconButton type="submit">
           <SaveIcon />
@@ -77,18 +65,3 @@ export default ({ data }: { data: Task }) => {
     </Box>
   );
 };
-
-function formatShortcut(event: any) {
-  let formattedShortcut = "";
-  // if (event.ctrlKey) {
-  //   formattedShortcut += "Ctrl+";
-  // }
-  // if (event.altKey) {
-  //   formattedShortcut += "Alt+";
-  // }
-  // if (event.shiftKey) {
-  //   formattedShortcut += "Shift+";
-  // }
-  formattedShortcut += event.key.toUpperCase();
-  return formattedShortcut;
-}

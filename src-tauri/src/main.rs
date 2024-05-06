@@ -1,9 +1,11 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+// use std::time::Duration;
 use rdev::{grab, Event, EventType, Key};
 use sysinfo::System;
 use tauri::{Manager, command};
+use tts::Tts;
 
 fn key_down_to_string(event_type: EventType) -> Option<&'static str> {
     let key_str = match event_type {
@@ -67,13 +69,39 @@ fn close_process_by_name(process_name: &str) {
     println!("not found process {}", process_name);
 }
 
+impl Future for Tts {
+    type Output = Result<(), Error>;
+
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        let tts = self.get_mut();
+        match tts.on_utterance_end(cx) {
+            Poll::Ready(Ok(())) => {
+                tts.shutdown();
+                Poll::Ready(Ok(()))
+            }
+            Poll::Ready(Err(e)) => {
+                tts.shutdown();
+                Poll::Ready(Err(e))
+            }
+            Poll::Pending => Poll::Pending,
+        }
+    }
+}
+
+#[command]
+async fn speak_text(text: &str) -> Result<()> {
+    // speaker::speak(text);
+    let mut tts = Tts::default().expect("Failed to initialize TTS");
+    let _ = tts.speak(text, false).await;
+    Ok(())
+}
+
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
             let window = app.get_window("main").unwrap();
             window.set_always_on_top(true).unwrap();
             tauri::async_runtime::spawn(async move {
-                println!("在任意界面输入F4，结束 DN 进程");
                 if let Err(error) = grab(move|event: Event| -> Option<Event>  {
                     if let Some(key) = key_down_to_string(event.event_type) {
                         println!("key down: {:?}", key);
@@ -89,7 +117,10 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![close_process_by_name])
+        .invoke_handler(tauri::generate_handler![
+            close_process_by_name,
+            speak_text,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

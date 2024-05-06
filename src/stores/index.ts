@@ -18,11 +18,11 @@ type Store = {
   addTask: () => void;
   deleteTask: (id: string) => void;
   updateTask: (task: Task) => void;
-  hover: boolean;
-  setHover: (hover: boolean) => void;
   save: () => void;
   exitTask: Task;
   updateExitTask: (task: Task) => void;
+  focusTask: Task | null;
+  setFocusTask: (task: Task | null) => void;
 };
 
 const getLocalConfig = () => {
@@ -54,14 +54,15 @@ const exitTask: Task = {
 const config = getLocalConfig();
 
 const useStore = create<Store>((set, get) => ({
-  hover: false,
-  setHover: (hover) => set({ hover: hover }),
+  focusTask: null,
+  setFocusTask: (task: Task | null) => set({ focusTask: task }),
   alwaysOnTop: config.alwaysOnTop ?? false,
   updateLock: () => set((state) => ({ alwaysOnTop: !state.alwaysOnTop })),
   tasks: config.tasks ?? [],
   addTask: () => {
     set((state) => ({
       tasks: [
+        ...state.tasks,
         {
           id: Date.now().toString(),
           title: "New Task",
@@ -69,12 +70,16 @@ const useStore = create<Store>((set, get) => ({
           completed: false,
           hotkey: "",
         },
-        ...state.tasks,
       ],
     }));
   },
-  deleteTask: (id: string) =>
-    set((state) => ({ tasks: state.tasks.filter((task) => task.id !== id) })),
+  deleteTask: (id: string) => {
+    const { focusTask } = get();
+    if (id === focusTask?.id) {
+      set({ focusTask: null });
+    }
+    set((state) => ({ tasks: state.tasks.filter((task) => task.id !== id) }));
+  },
   updateTask: (task: Task) => {
     set((state) => {
       const tasks = state.tasks
