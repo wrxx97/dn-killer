@@ -5,6 +5,7 @@ import useTauriEvent from "./hooks/useTauriEvent";
 import useStopDefaultKeyBoardEvent from "./hooks/useStopDefaultKeyBoardEvent";
 import useStopRightClickEvent from "./hooks/useStopRightClickEvent";
 import useAddDragData from "./hooks/useAddDragData";
+import useResizeWindow from "./hooks/useResizeWindow";
 
 export default function App() {
   const store = useStore();
@@ -12,6 +13,7 @@ export default function App() {
   useStopDefaultKeyBoardEvent(); // 禁用浏览器的默认键盘事件
   useStopRightClickEvent(); // 禁用右键菜单
   useAddDragData(); // 设置app的窗口拖动
+  useResizeWindow(); // 设置app的窗口大小
 
   return (
     <div

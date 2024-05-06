@@ -21,7 +21,11 @@ export default ({ task }: { task: Task }) => {
       key={task.id}
       sx={
         isFocus
-          ? {}
+          ? {
+              "&.Mui-expanded": {
+                margin: 0,
+              },
+            }
           : {
               backgroundColor: "rgba(0, 0, 0, 0.6)",
               color: "white",

@@ -10,6 +10,7 @@ export default function TaskList() {
   const tasks = useStore((store) => store.tasks);
   const updateTask = useStore((store) => store.updateTask);
   const exitTask = useStore((store) => store.exitTask);
+  const focusTask = useStore((store) => store.focusTask);
 
   const update = useUpdate();
   useInterval(async () => {
@@ -28,7 +29,7 @@ export default function TaskList() {
   return (
     <Box
       sx={{
-        height: "calc(100% - 50px)",
+        height: focusTask ? "calc(100% - 50px)" : "100%",
         overflowY: "scroll",
       }}
     >
