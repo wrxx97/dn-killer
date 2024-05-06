@@ -64,7 +64,6 @@ impl Future for TtsFeature {
                 }
             })))
             .expect("error");
-            println!("{:?}", &tts.voices());
             let _ = guard.tts.speak(text, false);
         }
 
