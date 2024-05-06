@@ -19,10 +19,14 @@ export default ({ task }: { task: Task }) => {
       expanded={isFocus}
       onChange={() => setFocusTask(isFocus ? null : task)}
       key={task.id}
-      sx={isFocus ? {} : {
-        backgroundColor: "rgba(0, 0, 0, 0.6)",
-        color: "white",
-      }}
+      sx={
+        isFocus
+          ? {}
+          : {
+              backgroundColor: "rgba(0, 0, 0, 0.6)",
+              color: "white",
+            }
+      }
     >
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box sx={{ width: "100%" }}>

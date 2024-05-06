@@ -23,6 +23,8 @@ type Store = {
   updateExitTask: (task: Task) => void;
   focusTask: Task | null;
   setFocusTask: (task: Task | null) => void;
+  route: string;
+  navigate: (route: string) => void;
 };
 
 const getLocalConfig = () => {
@@ -99,6 +101,8 @@ const useStore = create<Store>((set, get) => ({
       JSON.stringify({ tasks, alwaysOnTop, exitTask })
     );
   },
+  route: "/",
+  navigate: (route: string) => set({ route }),
 }));
 
 export default useStore;

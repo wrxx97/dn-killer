@@ -30,13 +30,7 @@ export default () => {
           }
         }
       );
-      // sendNotification("Tauri is awesome!");
-      // sendNotification({ title: "TAURI", body: "Tauri is awesome!" });
-      // console.log(permissionGranted);
       const unListenKeyup = await appWindow.listen("key-up", ({ payload }) => {
-        if (payload === "F2") {
-          invoke("speak_text", { text: "Hello" });
-        }
         tasks
           .filter((t) => t.hotkey === payload)
           .forEach((task) => {

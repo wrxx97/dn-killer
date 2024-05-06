@@ -21,7 +21,7 @@ export default function App() {
       }}
     >
       {(store.focusTask || !store.tasks.length) && <Header></Header>}
-      <TaskList></TaskList>
+      <TaskList key="list"></TaskList>
     </div>
   );
 }
