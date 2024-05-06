@@ -12,8 +12,9 @@ export default function FormInputText({
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value }, fieldState: { error } }) => (
+      render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
         <TextField
+          // ref={ref}
           helperText={error ? error.message : null}
           error={!!error}
           onChange={onChange}
@@ -21,6 +22,7 @@ export default function FormInputText({
           label={label}
           variant="outlined"
           type={type}
+          inputRef={ref}
         />
       )}
     />

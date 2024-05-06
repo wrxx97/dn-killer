@@ -62,23 +62,23 @@ const useStore = create<Store>((set, get) => ({
   updateLock: () => set((state) => ({ alwaysOnTop: !state.alwaysOnTop })),
   tasks: config.tasks ?? [],
   addTask: () => {
+    const newTask = {
+      id: Date.now().toString(),
+      title: "New Task",
+      duration: 0,
+      completed: false,
+      hotkey: "",
+    };
     set((state) => ({
-      tasks: [
-        ...state.tasks,
-        {
-          id: Date.now().toString(),
-          title: "New Task",
-          duration: 0,
-          completed: false,
-          hotkey: "",
-        },
-      ],
+      tasks: [newTask, ...state.tasks],
+      focusTask: newTask,
     }));
   },
   deleteTask: (id: string) => {
-    const { focusTask } = get();
+    const { focusTask, tasks } = get();
+    const newTarget = tasks.find((task) => task.id !== id);
     if (id === focusTask?.id) {
-      set({ focusTask: null });
+      set({ focusTask: newTarget });
     }
     set((state) => ({ tasks: state.tasks.filter((task) => task.id !== id) }));
   },

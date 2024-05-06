@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -11,12 +12,16 @@ import useStore, { Task } from "@/stores";
 
 export default ({ data }: { data: Task }) => {
   const store = useStore();
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, setFocus } = useForm({
     defaultValues: data,
-    values: data
+    values: data,
   });
 
   const isExit = data.type === "exit";
+
+  useEffect(() => {
+    if (store.focusTask?.id === data.id) setFocus("title");
+  }, [setFocus, store.focusTask]);
 
   return (
     <Box
@@ -38,7 +43,12 @@ export default ({ data }: { data: Task }) => {
     >
       <FormTextField name="title" control={control} label="标题" />
       {!isExit ? (
-        <FormTextField name="duration" control={control} type="number" label="时长" />
+        <FormTextField
+          name="duration"
+          control={control}
+          type="number"
+          label="时长"
+        />
       ) : null}
       <FormHotKey name="hotkey" control={control} label="快捷键" />
       <ButtonGroup size="small" aria-label="Small button group">
