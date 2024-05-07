@@ -4,7 +4,6 @@ import IconButton from "@mui/material/IconButton";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import SaveIcon from "@mui/icons-material/Save";
 import FormTextField from "@/components/form-text-field";
 import FormHotKey from "@/components/form-hot-key";
 import { useForm } from "react-hook-form";
@@ -12,12 +11,22 @@ import useStore, { Task } from "@/stores";
 
 export default ({ data }: { data: Task }) => {
   const store = useStore();
-  const { handleSubmit, control, setFocus } = useForm({
-    defaultValues: data,
+  const { control, watch, setFocus } = useForm({
     values: data,
   });
 
   const isExit = data.type === "exit";
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      const data = value as Task;
+      isExit
+        ? store.updateExitTask({ ...data })
+        : store.updateTask({ ...data });
+      store.save();
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, isExit]);
 
   useEffect(() => {
     if (store.focusTask?.id === data.id) setFocus("title");
@@ -34,12 +43,6 @@ export default ({ data }: { data: Task }) => {
       }}
       noValidate
       autoComplete="true"
-      onSubmit={handleSubmit((data) => {
-        isExit
-          ? store.updateExitTask({ ...data })
-          : store.updateTask({ ...data });
-        store.save();
-      })}
     >
       <FormTextField name="title" control={control} label="标题" />
       {!isExit ? (
@@ -52,9 +55,6 @@ export default ({ data }: { data: Task }) => {
       ) : null}
       <FormHotKey name="hotkey" control={control} label="快捷键" />
       <ButtonGroup size="small" aria-label="Small button group">
-        <IconButton type="submit">
-          <SaveIcon />
-        </IconButton>
         {isExit
           ? null
           : [

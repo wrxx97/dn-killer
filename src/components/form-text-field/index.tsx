@@ -1,6 +1,6 @@
 import { Controller } from "react-hook-form";
 import TextField from "@mui/material/TextField";
-import { FormTextFieldProps } from "./FormTextFieldType";
+import type { FormTextFieldProps } from "./FormTextFieldType";
 
 export default function FormInputText({
   name,
@@ -14,7 +14,6 @@ export default function FormInputText({
       control={control}
       render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
         <TextField
-          // ref={ref}
           helperText={error ? error.message : null}
           error={!!error}
           onChange={onChange}
@@ -23,6 +22,7 @@ export default function FormInputText({
           variant="outlined"
           type={type}
           inputRef={ref}
+          fullWidth
         />
       )}
     />

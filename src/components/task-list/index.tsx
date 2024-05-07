@@ -11,6 +11,7 @@ export default function TaskList() {
   const updateTask = useStore((store) => store.updateTask);
   const exitTask = useStore((store) => store.exitTask);
   const focusTask = useStore((store) => store.focusTask);
+  const setting = useStore((store) => store.setting);
 
   const update = useUpdate();
   useInterval(async () => {
@@ -19,8 +20,17 @@ export default function TaskList() {
       if (left <= 0) {
         updateTask({ ...task, startTime: null });
       }
-      if (left == 10) {
-        speakText(`${task.title}还有${left}秒`);
+      if (left == setting.notifyDr) {
+        const replaceData: any = {
+          ...task,
+          left,
+        };
+        const text =
+          setting.notifyTemplate?.replace(/\{(\w.+?)\}/g, (...args) => {
+            const key = args[1];
+            return replaceData?.[key] || "";
+          }) || `${task.title}还有${left}秒`;
+        speakText(text);
       }
     });
     update();

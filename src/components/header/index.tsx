@@ -2,15 +2,29 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import IconButton from "@mui/material/IconButton";
 import AddAlarmIcon from "@mui/icons-material/AddAlarm";
 import SettingsIcon from "@mui/icons-material/Settings";
-import CloseIcon from '@mui/icons-material/Close';
-import MinimizeIcon from '@mui/icons-material/Minimize';
-
+import CloseIcon from "@mui/icons-material/Close";
+import MinimizeIcon from "@mui/icons-material/Minimize";
+import HomeIcon from "@mui/icons-material/Home";
+import { useLocation, useNavigate } from "react-router-dom";
 import { appWindow } from "@tauri-apps/api/window";
 
 import useStore from "@/stores";
 
 export default () => {
   const store = useStore();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isSetting = location.pathname === "/setting";
+
+  const handleNavigate = () => {
+    if (isSetting) {
+      navigate("/");
+    } else {
+      navigate("/setting");
+    }
+  };
+
   return (
     <div
       id="drag-header"
@@ -19,20 +33,23 @@ export default () => {
         cursor: "move",
         width: "100%",
         textAlign: "right",
-        backgroundColor: "rgba(0, 0, 0, 0.6)",
       }}
     >
       <ButtonGroup>
         <IconButton onClick={() => store.addTask()}>
           <AddAlarmIcon color="info" />
         </IconButton>
-        <IconButton>
-          <SettingsIcon color="info" />
+        <IconButton onClick={handleNavigate}>
+          {isSetting ? (
+            <HomeIcon color="info" />
+          ) : (
+            <SettingsIcon color="info" />
+          )}
         </IconButton>
         <IconButton onClick={() => appWindow.minimize()}>
           <MinimizeIcon color="info" />
         </IconButton>
-        <IconButton onClick={() => appWindow.close()} >
+        <IconButton onClick={() => appWindow.close()}>
           <CloseIcon color="info" />
         </IconButton>
       </ButtonGroup>
