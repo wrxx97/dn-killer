@@ -22,7 +22,6 @@ export default () => {
   const listener = useRef<any>();
   useEffect(() => {
     async function init() {
-      console.log("init");
       const unListenKeyDown = await appWindow.listen(
         "key-down",
         ({ payload }) => {

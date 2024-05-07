@@ -13,11 +13,13 @@ export default () => {
   const store = useStore();
   return (
     <div
+      id="drag-header"
       data-tauri-drag-region
       style={{
         cursor: "move",
         width: "100%",
         textAlign: "right",
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
       }}
     >
       <ButtonGroup>
