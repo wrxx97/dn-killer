@@ -41,7 +41,7 @@ export default function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <RouterProvider router={router} />{" "}
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }
