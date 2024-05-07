@@ -28,7 +28,11 @@ export default ({ task }: { task: Task }) => {
             }
           : {
               "&.MuiAccordion-root": {
+                boxShadow: "none",
                 backgroundColor: "transparent",
+              },
+              "&.MuiAccordion-root:before": {
+                display: "none",
               },
             }
       }

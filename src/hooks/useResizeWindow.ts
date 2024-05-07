@@ -15,8 +15,8 @@ export default () => {
       height = formHeight + 40;
     } else {
       height = focusTask
-        ? 50 * tasks.length + 144 + 40
-        : (tasks.length + 1) * 50;
+        ? 52 * tasks.length + 144 + 40
+        : (tasks.length + 1) * 52;
     }
     appWindow.setSize(new LogicalSize(600, height));
   }, [tasks.length, focusTask, location]);
