@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import FormSwitch from "@/components/form-switch";
 import FormTextField from "@/components/form-text-field";
 import FormSlider from "@/components/form-slider";
+import FormColorPicker from "@/components/form-color-picker";
 
 import useStore, { Setting } from "@/stores";
 
@@ -43,6 +44,7 @@ export default () => {
       noValidate
       autoComplete="true"
     >
+      <FormColorPicker name="fontColor" control={control} label="文本颜色" />
       <FormSwitch name="notifyFlag" control={control} label="语音提示" />
       <FormTextField name="notifyTemplate" control={control} label="提示模板" />
       <FormTextField

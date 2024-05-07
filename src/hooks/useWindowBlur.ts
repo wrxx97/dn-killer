@@ -7,9 +7,12 @@ export default () => {
   const setFocusTask = useStore((state) => state.setFocusTask);
 
   useEffect(() => {
-    window.onblur = () => {
-      navigate("/");
-      setFocusTask(null);
-    };
+    const isDev = import.meta.env.MODE === "development";
+    window.onblur = isDev
+      ? null
+      : () => {
+          navigate("/");
+          setFocusTask(null);
+        };
   }, []);
 };

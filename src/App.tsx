@@ -30,7 +30,7 @@ export default function App() {
         palette: {
           mode: "dark",
           background: {
-            default: `rgba(12, 12, 12, ${setting.opciaty / 100})`,
+            default: `rgba(0, 0, 0, ${setting.opciaty / 100})`,
             paper: "#0c0c0c",
           },
         },

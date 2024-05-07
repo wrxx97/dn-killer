@@ -9,8 +9,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { appWindow } from "@tauri-apps/api/window";
 
 import useStore from "@/stores";
+import { ReactElement } from "react";
 
-export default () => {
+export default ({ left = <div /> }: { left?: ReactElement }) => {
   const store = useStore();
   const location = useLocation();
   const navigate = useNavigate();
@@ -32,9 +33,11 @@ export default () => {
       style={{
         cursor: "move",
         width: "100%",
-        textAlign: "right",
+        display: "flex",
+        justifyContent: "space-between",
       }}
     >
+      {left}
       <ButtonGroup>
         <IconButton onClick={() => store.addTask()}>
           <AddAlarmIcon color="info" />

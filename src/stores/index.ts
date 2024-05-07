@@ -16,6 +16,12 @@ export type Setting = {
   notifyTemplate?: string;
   notifyDr?: number;
   opciaty: number;
+  fontColor?: string;
+};
+
+export type Group = {
+  name: string;
+  id: number;
 };
 
 type Store = {
@@ -32,6 +38,9 @@ type Store = {
   setFocusTask: (task: Task | null) => void;
   setting: Setting;
   updateSetting: (setting: Setting) => void;
+  groups: Array<Group>;
+  currentGroup: number;
+  addGroup: (name: string) => void;
 };
 
 const getLocalConfig = () => {
@@ -70,18 +79,28 @@ const defaultSetting: Setting = {
 const config = getLocalConfig();
 
 const useStore = create<Store>((set, get) => ({
+  currentGroup: config.currentGroup ?? 0,
+  groups: [{ name: "默认分组", id: 0 }],
+  addGroup: (name: string) => {
+    set((state) => {
+      const groups = state.groups.concat({ name, id: Date.now() });
+      return { groups };
+    });
+  },
   focusTask: null,
   setFocusTask: (task: Task | null) => set({ focusTask: task }),
   alwaysOnTop: config.alwaysOnTop ?? false,
   updateLock: () => set((state) => ({ alwaysOnTop: !state.alwaysOnTop })),
   tasks: config.tasks ?? [],
   addTask: () => {
+    const { currentGroup } = get();
     const newTask = {
       id: Date.now().toString(),
       title: "New Task",
       duration: 0,
       completed: false,
       hotkey: "",
+      group: currentGroup,
     };
     set((state) => ({
       tasks: [newTask, ...state.tasks],
@@ -109,10 +128,18 @@ const useStore = create<Store>((set, get) => ({
   exitTask: config.exitTask ?? exitTask,
   updateExitTask: (task: Task) => set({ exitTask: task }),
   save: () => {
-    const { tasks, alwaysOnTop, exitTask, setting } = get();
+    const { tasks, alwaysOnTop, exitTask, setting, currentGroup, groups } =
+      get();
     localStorage.setItem(
       "appConfig",
-      JSON.stringify({ tasks, alwaysOnTop, exitTask, setting })
+      JSON.stringify({
+        tasks,
+        alwaysOnTop,
+        exitTask,
+        setting,
+        currentGroup,
+        groups,
+      })
     );
   },
   setting: config.setting ?? defaultSetting,
