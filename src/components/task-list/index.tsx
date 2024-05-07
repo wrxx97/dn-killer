@@ -20,7 +20,7 @@ export default function TaskList() {
       if (left <= 0) {
         updateTask({ ...task, startTime: null });
       }
-      if (left == setting.notifyDr) {
+      if (setting.notifyFlag && left == setting.notifyDr) {
         const replaceData: any = {
           ...task,
           left,
