@@ -13,7 +13,7 @@ export default function Home() {
 
   return (
     <div>
-      {(store.focusTask || !store.tasks.length) && <Header></Header>}
+      {store.focusTask && <Header></Header>}
       <TaskList key="list"></TaskList>
     </div>
   );

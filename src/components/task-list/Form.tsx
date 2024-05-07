@@ -20,6 +20,7 @@ export default ({ data }: { data: Task }) => {
   useEffect(() => {
     const subscription = watch((value) => {
       const data = value as Task;
+      console.info(data);
       isExit
         ? store.updateExitTask({ ...data })
         : store.updateTask({ ...data });
