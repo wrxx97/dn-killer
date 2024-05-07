@@ -1,18 +1,7 @@
 import { useEffect, useRef } from "react";
 import { appWindow } from "@tauri-apps/api/window";
 import useStore from "@/stores";
-import { invoke } from "@tauri-apps/api";
-import throttle from "lodash/throttle";
-
-const killProcess = throttle(
-  (processName: string) => {
-    invoke("close_process_by_name", { processName }).then((response) =>
-      console.log(response)
-    );
-  },
-  2000,
-  { trailing: false }
-);
+import { killProcess } from "@/invoke";
 
 export default () => {
   const tasks = useStore((store) => store.tasks);

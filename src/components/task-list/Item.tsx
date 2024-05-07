@@ -27,12 +27,13 @@ export default ({ task }: { task: Task }) => {
               },
             }
           : {
-              backgroundColor: "rgba(0, 0, 0, 0.6)",
-              color: "white",
+              "&.MuiAccordion-root": {
+                backgroundColor: "transparent",
+              },
             }
       }
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon fontSize="large" />}>
         <Box sx={{ width: "100%" }}>
           {task.type !== "exit" ? (
             <>

@@ -1,6 +1,6 @@
 import { Controller } from "react-hook-form";
 import TextField from "@mui/material/TextField";
-import { FormHotKeyProps } from "./FormHotKey";
+import type { FormHotKeyProps } from "./FormHotKey";
 
 export default function FormInputText({
   name,

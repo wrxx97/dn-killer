@@ -11,6 +11,13 @@ export type Task = {
   type?: "exit";
 };
 
+export type Setting = {
+  notifyFlag?: boolean;
+  notifyTemplate?: string;
+  notifyDr?: number;
+  opciaty: number;
+};
+
 type Store = {
   alwaysOnTop: boolean;
   updateLock: () => void;
@@ -23,8 +30,8 @@ type Store = {
   updateExitTask: (task: Task) => void;
   focusTask: Task | null;
   setFocusTask: (task: Task | null) => void;
-  route: string;
-  navigate: (route: string) => void;
+  setting: Setting;
+  updateSetting: (setting: Setting) => void;
 };
 
 const getLocalConfig = () => {
@@ -51,6 +58,13 @@ const exitTask: Task = {
   hotkey: "F6",
   type: "exit",
   processName: "WeChat.exe",
+};
+
+const defaultSetting: Setting = {
+  notifyFlag: true,
+  notifyTemplate: "{title}还有{left}秒",
+  notifyDr: 10,
+  opciaty: 50,
 };
 
 const config = getLocalConfig();
@@ -95,14 +109,22 @@ const useStore = create<Store>((set, get) => ({
   exitTask: config.exitTask ?? exitTask,
   updateExitTask: (task: Task) => set({ exitTask: task }),
   save: () => {
-    const { tasks, alwaysOnTop, exitTask } = get();
+    const { tasks, alwaysOnTop, exitTask, setting } = get();
     localStorage.setItem(
       "appConfig",
-      JSON.stringify({ tasks, alwaysOnTop, exitTask })
+      JSON.stringify({ tasks, alwaysOnTop, exitTask, setting })
     );
   },
-  route: "/",
-  navigate: (route: string) => set({ route }),
+  setting: config.setting ?? defaultSetting,
+  updateSetting: (setting: Setting) => {
+    const { setting: oldSetting } = get();
+    set({
+      setting: {
+        ...oldSetting,
+        ...setting,
+      },
+    });
+  },
 }));
 
 export default useStore;

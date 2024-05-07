@@ -1,13 +1,12 @@
 import { useEffect } from "react";
+
 export default () => {
   useEffect(() => {
     const stopDefaultKeyBoardEvent = (e: KeyboardEvent) => {
-      if (
-        e.key === "F3" ||
-        // e.key === "F5" ||
-        // e.key === "F12" ||
-        (e.ctrlKey && e.key === "r")
-      ) {
+      const isDev = import.meta.env.MODE === "development";
+      // 屏蔽的按键
+      const stopKeys = isDev ? ["F3"] : ["F3", "F5", "F12"];
+      if (stopKeys.includes(e.key) || (e.ctrlKey && e.key === "r")) {
         e.stopPropagation();
         e.preventDefault();
       }
