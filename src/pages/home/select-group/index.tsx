@@ -54,7 +54,7 @@ export default function SelectGroup() {
       <Controller
         name="currentGroup"
         control={control}
-        render={({ field: { onChange, value } }) => (
+        render={() => (
           <>
             <Button
               id="demo-positioned-button"

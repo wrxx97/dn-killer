@@ -74,6 +74,7 @@ const defaultSetting: Setting = {
   notifyTemplate: "{title}还有{left}秒",
   notifyDr: 10,
   opciaty: 50,
+  fontColor: "#fff",
 };
 
 const config = getLocalConfig();
