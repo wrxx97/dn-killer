@@ -16,6 +16,7 @@ export type Setting = {
   notifyDr?: number;
   opciaty: number;
   fontColor?: string;
+  autoUpdate: boolean;
 };
 
 export type Group = {
@@ -75,6 +76,7 @@ const defaultSetting: Setting = {
   notifyDr: 10,
   opciaty: 50,
   fontColor: "#fff",
+  autoUpdate: true,
 };
 
 const config = getLocalConfig();

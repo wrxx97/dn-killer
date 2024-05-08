@@ -8,7 +8,6 @@ import Home from "@/pages/home";
 import Setting from "@/pages/setting";
 import Check from "@/pages/check";
 import useStore from "@/stores";
-import useUpdater from "./hooks/useUpdater";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +28,6 @@ export default function App() {
   const setting = useStore((store) => store.setting);
   useStopDefaultKeyBoardEvent(); // 禁用浏览器的默认键盘事件
   useStopRightClickEvent(); // 禁用右键菜单
-  useUpdater(); // 检查更新
 
   const darkTheme = useMemo(
     () =>

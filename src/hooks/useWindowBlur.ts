@@ -11,7 +11,7 @@ export default () => {
     window.onblur = isDev
       ? null
       : () => {
-          navigate("/");
+          navigate("/home");
           setFocusTask(null);
         };
   }, []);

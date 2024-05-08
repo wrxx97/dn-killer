@@ -20,7 +20,7 @@ export default ({ left = <div /> }: { left?: ReactElement }) => {
 
   const handleNavigate = () => {
     if (isSetting) {
-      navigate("/");
+      navigate("/home");
     } else {
       navigate("/setting");
     }
