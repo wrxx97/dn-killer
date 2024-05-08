@@ -11,6 +11,7 @@ import useStore, { getLeftDuration, processTask, Task } from "@/stores";
 export default ({ task }: { task: Task }) => {
   const focusTask = useStore((store) => store.focusTask);
   const setFocusTask = useStore((store) => store.setFocusTask);
+  const setting = useStore((store) => store.setting);
   const isFocus = focusTask?.id === task.id;
 
   return (
@@ -25,11 +26,16 @@ export default ({ task }: { task: Task }) => {
               "&.Mui-expanded": {
                 margin: 0,
               },
+              "&.MuiAccordion-root": {
+                boxShadow: "none",
+                background: "rgba(0, 0, 0, 0.6)",
+              },
             }
           : {
               "&.MuiAccordion-root": {
                 boxShadow: "none",
-                backgroundColor: "transparent",
+                background: "transparent",
+                color: setting.fontColor,
               },
               "&.MuiAccordion-root:before": {
                 display: "none",

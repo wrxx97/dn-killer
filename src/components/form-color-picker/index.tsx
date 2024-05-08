@@ -1,13 +1,13 @@
 import { Controller } from "react-hook-form";
-import Switch from "@mui/material/Switch";
+import { MuiColorInput } from "mui-color-input";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { FormSwitchProps } from "./FormSwitch";
+import type { FormColorPickerProps } from "./FormColorPicker";
 
 export default function FormInputText({
   name,
   control,
   label,
-}: FormSwitchProps) {
+}: FormColorPickerProps) {
   return (
     <Controller
       name={name}
@@ -16,7 +16,14 @@ export default function FormInputText({
         <FormControlLabel
           value={value}
           control={
-            <Switch color="primary" checked={value} onChange={onChange} />
+            <MuiColorInput
+              format="hex8"
+              value={value}
+              onChange={onChange}
+              style={{
+                marginLeft: "0.8rem",
+              }}
+            />
           }
           label={label}
           labelPlacement="start"

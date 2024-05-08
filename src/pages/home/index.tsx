@@ -4,6 +4,7 @@ import useStore from "@/stores";
 import useTauriEvent from "@/hooks/useTauriEvent";
 import useAddDragData from "@/hooks/useAddDragData";
 import useResizeWindow from "@/hooks/useResizeWindow";
+import SelectGroup from "./select-group";
 
 export default function Home() {
   const store = useStore();
@@ -13,7 +14,7 @@ export default function Home() {
 
   return (
     <div>
-      {(store.focusTask || !store.tasks.length) && <Header></Header>}
+      {store.focusTask && <Header left={<SelectGroup />}></Header>}
       <TaskList key="list"></TaskList>
     </div>
   );

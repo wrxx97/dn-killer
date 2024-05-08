@@ -7,6 +7,7 @@ export default function FormInputText({
   control,
   label,
   type,
+  ...rest
 }: FormTextFieldProps) {
   return (
     <Controller
@@ -23,6 +24,7 @@ export default function FormInputText({
           type={type}
           inputRef={ref}
           fullWidth
+          {...rest}
         />
       )}
     />
