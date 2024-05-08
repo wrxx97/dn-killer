@@ -27,7 +27,7 @@ export default function SelectGroup() {
   const currentGroup = useStore((state) => state.currentGroup);
   const groups = useStore((state) => state.groups);
   const addGroup = useStore((state) => state.addGroup);
-  const { control, watch, setFocus } = useForm({
+  const { control, watch } = useForm({
     values: {
       currentGroup,
       ...groups.reduce((pre, cur) => {
