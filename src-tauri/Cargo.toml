@@ -1,6 +1,6 @@
 [package]
 name = "dn-killer"
-version = "0.0.0"
+version = "0.0.3"
 description = "DN-Killer"
 authors = ["you"]
 edition = "2021"

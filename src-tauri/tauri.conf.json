@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "dn-killer",
-    "version": "0.0.2"
+    "version": "0.0.3"
   },
   "tauri": {
     "allowlist": {
@@ -51,7 +51,7 @@
       "windows": {
         "installMode": "passive"
       },
-      "dialog": true,
+      "dialog": false,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZENThCNkRGNDE0NTIyRjAKUldUd0lrVkIzN1pZL2NqaUdFR1hRYkFHVnl0bFAxOW9qVDJ2UGhXQk9aOWl6eStkMm1mS0dLYWMK"
     },
     "bundle": {

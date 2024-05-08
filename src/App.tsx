@@ -6,16 +6,21 @@ import useStopDefaultKeyBoardEvent from "@/hooks/useStopDefaultKeyBoardEvent";
 import useStopRightClickEvent from "@/hooks/useStopRightClickEvent";
 import Home from "@/pages/home";
 import Setting from "@/pages/setting";
+import Check from "@/pages/check";
 import useStore from "@/stores";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/home",
     element: <Home />,
   },
   {
     path: "/setting",
     element: <Setting />,
+  },
+  {
+    path: "/",
+    element: <Check />,
   },
 ]);
 

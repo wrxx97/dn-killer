@@ -21,8 +21,7 @@ export default () => {
         "key-down",
         ({ payload }) => {
           if (payload === storeRef.current.exitTask.hotkey) {
-            storeRef.current.exitTask.processName &&
-              killProcess(exitTask.title);
+            storeRef.current.exitTask.title && killProcess(exitTask.title);
           }
         }
       );

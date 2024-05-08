@@ -10,7 +10,9 @@ export default () => {
 
   useEffect(() => {
     let height = 0;
-    if (location.pathname === "/setting") {
+    if (location.pathname === "/") {
+      height = 200;
+    } else if (location.pathname === "/setting") {
       const formHeight = document.querySelector("form")?.scrollHeight || 200;
       height = formHeight + 40;
     } else {
