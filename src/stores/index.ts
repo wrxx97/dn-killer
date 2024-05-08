@@ -7,7 +7,6 @@ export type Task = {
   completed: boolean;
   hotkey: string;
   startTime?: number | null;
-  processName?: string;
   type?: "exit";
 };
 
@@ -41,6 +40,8 @@ type Store = {
   groups: Array<Group>;
   currentGroup: number;
   addGroup: (name: string) => void;
+  checkUpdate: boolean;
+  setCheckUpdate: (flag: boolean) => void;
 };
 
 const getLocalConfig = () => {
@@ -66,7 +67,6 @@ const exitTask: Task = {
   completed: false,
   hotkey: "F6",
   type: "exit",
-  processName: "WeChat.exe",
 };
 
 const defaultSetting: Setting = {
@@ -153,6 +153,8 @@ const useStore = create<Store>((set, get) => ({
       },
     });
   },
+  checkUpdate: false,
+  setCheckUpdate: (flag: boolean) => set({ checkUpdate: flag }),
 }));
 
 export default useStore;
