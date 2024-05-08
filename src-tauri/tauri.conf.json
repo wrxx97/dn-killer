@@ -43,6 +43,14 @@
     "systemTray": {
       "iconPath": "icons/32x32.png"
     },
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://releases.myapp.com/{{target}}/{{arch}}/{{current_version}}"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZENThCNkRGNDE0NTIyRjAKUldUd0lrVkIzN1pZL2NqaUdFR1hRYkFHVnl0bFAxOW9qVDJ2UGhXQk9aOWl6eStkMm1mS0dLYWMK"
+    },
     "bundle": {
       "active": true,
       "targets": "all",
