@@ -16,7 +16,6 @@ import useStore, { Setting } from "@/stores";
 export default () => {
   const setting = useStore((store) => store.setting);
   const updateSetting = useStore((store) => store.updateSetting);
-  const checkUpdateFlag = useStore((store) => store.checkUpdate);
   const navigate = useNavigate();
   const setCheckUpdate = useStore((store) => store.setCheckUpdate);
   const save = useStore((store) => store.save);
