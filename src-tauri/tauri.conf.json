@@ -49,7 +49,7 @@
         "https://dn-killer.oss-cn-shanghai.aliyuncs.com/latest.json"
       ],
       "windows": {
-        "installMode": "passive"
+        "installMode": "basicUi"
       },
       "dialog": false,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZENThCNkRGNDE0NTIyRjAKUldUd0lrVkIzN1pZL2NqaUdFR1hRYkFHVnl0bFAxOW9qVDJ2UGhXQk9aOWl6eStkMm1mS0dLYWMK"
