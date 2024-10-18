@@ -14,6 +14,17 @@ export default ({ task }: { task: Task }) => {
   const setting = useStore((store) => store.setting);
   const isFocus = focusTask?.id === task.id;
 
+  const getColor = () => {
+    const progress = processTask(task);
+    if (progress > 50) {
+      return "primary"; // 蓝色 (默认颜色)
+    } else if (progress > 20) {
+      return "warning"; // 黄色
+    } else {
+      return "error"; // 红色
+    }
+  };
+
   return (
     <Accordion
       defaultExpanded={false}
@@ -50,7 +61,11 @@ export default ({ task }: { task: Task }) => {
               {`${task.title} （${getLeftDuration(task)}秒）(快捷键：${
                 task.hotkey
               })`}
-              <LinearProgress variant="determinate" value={processTask(task)} />
+              <LinearProgress
+                variant="determinate"
+                value={processTask(task)}
+                color={getColor()}
+              />
             </>
           ) : (
             `退出 ${task.title} (快捷键：${task.hotkey})`
