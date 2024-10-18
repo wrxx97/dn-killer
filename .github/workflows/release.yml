@@ -8,7 +8,24 @@ on:
   workflow_dispatch:
 
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
   publish-tauri:
+    needs: create-release
     permissions:
       contents: write
     strategy:
@@ -57,7 +74,7 @@ jobs:
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
           tagName: dn-killer-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseId: ${{ needs.create-release.outputs.release_id }}
+          # releaseId: ${{ needs.create-release.outputs.release_id }}
           releaseName: "dn killer v__VERSION__"
           releaseBody: "See the assets to download this version and install."
           releaseDraft: true
