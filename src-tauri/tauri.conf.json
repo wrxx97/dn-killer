@@ -46,7 +46,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://dn-killer.oss-cn-shanghai.aliyuncs.com/latest.json"
+        "https://github.com/wrxx97/dn-killer/releases/download/dn-killer-v0.0.3/latest.json"
       ],
       "windows": {
         "installMode": "basicUi"
