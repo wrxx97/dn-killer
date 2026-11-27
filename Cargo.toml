@@ -1,0 +1,48 @@
+[package]
+name = "dn-killer"
+version = "0.2.7"
+edition = "2024"
+rust-version = "1.100"
+publish = false
+
+[dependencies]
+anyhow = "1"
+async-channel = "2"
+dirs = "6"
+gpui = { package = "gpui-pre", version = "=0.3.14" }
+gpui-platform = { package = "gpui-pre-platform", version = "=0.3.14" }
+gpui-component = { version = "=0.11.0", default-features = false }
+gpui-kit-assets = "=0.11.0"
+image = { version = "0.25", default-features = false, features = ["png"] }
+raw-window-handle = "0.6"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sysinfo = { version = "0.31", default-features = false, features = ["system"] }
+tempfile = "3"
+tray-icon = { version = "0.27", default-features = false }
+
+[build-dependencies]
+embed-resource = "3"
+
+[dependencies.windows]
+version = "0.62"
+features = [
+    "Media_Core",
+    "Media_SpeechSynthesis",
+    "Storage_Streams",
+    "Win32_Media_Audio",
+    "Win32_System_WinRT",
+]
+
+[dependencies.windows-sys]
+version = "0.61"
+features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_Security",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Threading",
+    "Win32_UI_Input",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+]

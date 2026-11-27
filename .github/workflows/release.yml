@@ -1,65 +1,91 @@
-name: "publish"
+name: Windows build and release
 
 on:
   push:
-    # Sequence of patterns matched against refs/tags
     tags:
-      - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
+      - 'v*'
+  pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  publish-tauri:
+  build:
+    name: Build Windows x64
+    runs-on: windows-2025
+    timeout-minutes: 45
+    env:
+      RUSTUP_TOOLCHAIN: 1.100.0-x86_64-pc-windows-msvc
+      CARGO_PROFILE_TEST_DEBUG: '0'
+
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Install Rust
+        run: rustup toolchain install "$env:RUSTUP_TOOLCHAIN" --profile minimal --component rustfmt
+
+      - name: Check release version
+        id: version
+        run: |
+          $metadata = cargo metadata --locked --no-deps --format-version 1
+          if ($LASTEXITCODE -ne 0) { throw 'Could not read Cargo metadata.' }
+          $version = ($metadata | ConvertFrom-Json).packages[0].version
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -cne "v$version") {
+            throw "Tag $env:GITHUB_REF_NAME must match Cargo version v$version."
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Check formatting and run tests
+        run: |
+          cargo fmt --check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo test --locked
+
+      - name: Package the installer and portable executable
+        if: github.event_name != 'pull_request'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          $makensis = Join-Path ${env:ProgramFiles(x86)} 'NSIS/makensis.exe'
+          if (!(Test-Path -LiteralPath $makensis -PathType Leaf)) {
+            choco install nsis --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { throw 'Could not install NSIS.' }
+          }
+          ./installer/package.ps1 -MakeNsis $makensis
+          New-Item -ItemType Directory -Path dist -Force | Out-Null
+          $name = "DN-Killer-$env:VERSION-x64"
+          Copy-Item -LiteralPath "target/$name-setup.exe" -Destination dist
+          Copy-Item -LiteralPath 'target/x86_64-pc-windows-msvc/release/dn-killer.exe' -Destination "dist/$name.exe"
+
+      - name: Upload Windows packages
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: dn-killer-windows-x64
+          path: dist/*.exe
+          if-no-files-found: error
+          compression-level: 0
+
+  release:
+    name: Publish GitHub Release
+    if: github.ref_type == 'tag'
+    needs: build
+    runs-on: ubuntu-latest
     permissions:
       contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: "windows-latest"
-            args: ""
 
-    runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: setup node
-        uses: actions/setup-node@v4
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
-          node-version: lts/*
+          name: dn-killer-windows-x64
+          path: release-assets
 
-      - name: install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
-
-      - name: install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
-        # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
-        # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
-
-        # 使用 pnpm 作为包管理器
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: install frontend dependencies
-        run: pnpm install --no-frozen-lockfile # change this to npm, pnpm or bun depending on which one you use.
-
-      - uses: tauri-apps/tauri-action@v0.5.3
+      - name: Publish the release and assets
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
-          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
-        with:
-          tagName: dn-killer-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          # releaseId: ${{ needs.create-release.outputs.release_id }}
-          releaseName: "dn killer v__VERSION__"
-          releaseBody: "See the assets to download this version and install."
-          releaseDraft: true
-          prerelease: false
-          args: ${{ matrix.args }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "release-assets/DN-Killer-${GITHUB_REF_NAME#v}-x64.exe" "release-assets/DN-Killer-${GITHUB_REF_NAME#v}-x64-setup.exe" \
+            --repo "$GITHUB_REPOSITORY" --verify-tag --title "DN Killer $GITHUB_REF_NAME" --generate-notes
